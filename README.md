@@ -36,7 +36,7 @@ except:
 ## 分析数据
 在这部分，通过可视化和代码来理解每一个特征和其他特征的联系。会看到关于数据集的统计描述，考虑每一个属性的相关性，然后从数据集中选择若干个样本数据点，将在整个项目中一直跟踪研究这几个数据点。
 
-注意这个数据集包含了6个重要的产品类型：**'Fresh'**, **'Milk'**, **'Grocery'**, **'Frozen'**, **'Detergents_Paper'**和 **'Delicatessen'**。想一下这里每一个类型代表你会购买什么样的产品。
+这个数据集包含了6个重要的产品类型：**'Fresh'**, **'Milk'**, **'Grocery'**, **'Frozen'**, **'Detergents_Paper'**和 **'Delicatessen'**。考虑这里每一个类型代表你会购买什么样的产品。
 
 ```python
 # 显示数据集的一个描述
@@ -137,7 +137,7 @@ display(data.describe())
 
 
 ### 选择样本
-为了对客户有一个更好的了解，并且了解代表他们的数据将会在这个分析过程中如何变换。最好是选择几个样本数据点，并且更为详细地分析它们。在下面的代码单元中，选择**三个**索引加入到索引列表`indices`中，这三个索引代表你要追踪的客户。
+为了对客户有一个更好的了解，并且了解代表他们的数据将会在这个分析过程中如何变换。最好是选择几个样本数据点，并且更为详细地分析它们。在下面我选择了**三个**索引加入到索引列表`indices`中，这三个索引代表要追踪的客户。
 
 ```python
 data.describe().plot(kind="box", figsize=(14,8))
@@ -148,7 +148,7 @@ plt.ylim(0, 20000)
 ![png](output_7_1.png)
 
 ```python
-# 从数据集中选择三个你希望抽样的数据点的索引
+# 从数据集中选择三个希望抽样的数据点的索引
 np.random.seed(42)
 
 indices = [np.random.randint(len(data)),np.random.randint(len(data)),np.random.randint(len(data))]
@@ -207,9 +207,7 @@ display(samples)
 </table>
 </div>
 
-
-### 问题 1
-*在你看来你选择的这三个样本点分别代表什么类型的企业（客户）？*对每一个你选择的样本客户，通过它在每一种产品类型上的花费与数据集的统计描述进行比较，给出你做上述判断的理由。
+*对每一个你选择的样本客户，通过它在每一种产品类型上的花费与数据集的统计描述进行比较，判断它们大概属于什么类型的客户*
 
 1. 第一个样本点，`"Milk"`,`"Grocery"`,`"Frozen"`,`"Delicatessen"` 高于median，推测是咖啡馆, 餐厅
 2. 第二个样本点，"Grocery"和"Fresh"远高于median，推测为超市
@@ -246,15 +244,12 @@ score
 
     -2.254711537203931
 
-### 问题 2
-*你尝试预测哪一个特征？预测的得分是多少？这个特征对于区分用户的消费习惯来说必要吗？为什么？*  
-**提示：** 决定系数（coefficient of determination）, `R^2`,结果在0到1之间，1表示完美拟合，一个负的`R^2`表示模型不能够拟合数据。
+*决定系数（coefficient of determination）, `R^2`,结果在0到1之间，1表示完美拟合，一个负的`R^2`表示模型不能够拟合数据。*
 
-尝试预测"Delicatessen", 预测得分是-2.25，这个特征与其他特征相关性不大，因此对于区分用户的消费习惯是有必要的
+**尝试预测"Delicatessen", 预测得分是-2.25，这个特征与其他特征相关性不大，因此对于区分用户的消费习惯是有必要的**
 
 ### 可视化特征分布
-为了能够对这个数据集有一个更好的理解，我们可以对数据集中的每一个产品特征构建一个散布矩阵（scatter matrix）。如果你发现你在上面尝试预测的特征对于区分一个特定的用户来说是必须的，那么这个特征和其它的特征可能不会在下面的散射矩阵中显示任何关系。相反的，如果你认为这个特征对于识别一个特定的客户是没有作用的，那么通过散布矩阵可以看出在这个数据特征和其它特征中有关联性。运行下面的代码以创建一个散布矩阵。
-
+为了能够对这个数据集有一个更好的理解，我们可以对数据集中的每一个产品特征构建一个散布矩阵（scatter matrix）。如果你发现你在上面尝试预测的特征对于区分一个特定的用户来说是必须的，那么这个特征和其它的特征可能不会在下面的散射矩阵中显示任何关系。相反的，如果你认为这个特征对于识别一个特定的客户是没有作用的，那么通过散布矩阵可以看出在这个数据特征和其它特征中有关联性。
 
 ```python
 # 对于数据中的每一对特征构造一个散布矩阵
@@ -271,15 +266,14 @@ sns.heatmap(data.astype(float).corr(), vmax=1.0, annot=True)
 
 ![png](output_17_1.png)
 
-### 问题 3
-*这里是否存在一些特征他们彼此之间存在一定程度相关性？如果有请列出。这个结果是验证了还是否认了你尝试预测的那个特征的相关性？这些特征的数据是怎么分布的？*
+### 特征相关性
 
 1. "Milk" 和 "Detergents_Paper", "Grocery"有较强相关， "Grocery" 和"Detergents_Paper"强相关。  
 2. 这些结果验证了我预测的"Delicatessen"的相关性，与其他变量相关性都不高。  
 3. 数据呈正偏斜分布，大多数据分布在0-10000
 
 ## 数据预处理
-在这个部分，你将通过在数据上做一个合适的缩放，并检测异常点（你可以选择性移除）将数据预处理成一个更好的代表客户的形式。预处理数据是保证你在分析中能够得到显著且有意义的结果的重要环节。
+在这个部分，通过在数据上做一个合适的缩放，并检测异常点（选择性移除）将数据预处理成一个更好的代表客户的形式。预处理数据是保证你在分析中能够得到显著且有意义的结果的重要环节。
 
 ### 特征缩放
 如果数据不是正态分布的，尤其是数据的平均数和中位数相差很大的时候（表示数据非常歪斜）。这时候通常用一个非线性的缩放是[很合适的](https://github.com/czcbangkai/translations/blob/master/use_of_logarithms_in_economics/use_of_logarithms_in_economics.pdf)，[（英文原文）](http://econbrowser.com/archives/2014/02/use-of-logarithms-in-economics) — 尤其是对于金融数据。一种实现这个缩放的方法是使用[Box-Cox 变换](http://scipy.github.io/devdocs/generated/scipy.stats.boxcox.html)，这个方法能够计算出能够最佳减小数据倾斜的指数变换方法。一个比较简单的并且在大多数情况下都适用的方法是使用自然对数。
@@ -288,10 +282,10 @@ sns.heatmap(data.astype(float).corr(), vmax=1.0, annot=True)
  - 使用`np.log`函数在样本数据 `samples` 上做一个对数缩放，然后将它的副本赋值给`log_samples`。
 
 ```python
-# TODO：使用自然对数缩放数据
+# 使用自然对数缩放数据
 log_data = np.log(data)
 
-# TODO：使用自然对数缩放样本数据
+# 使用自然对数缩放样本数据
 log_samples = np.log(samples)
 
 # 为每一对新产生的特征制作一个散射矩阵
@@ -299,6 +293,8 @@ pd.plotting.scatter_matrix(log_data, alpha = 0.3, figsize = (14,8), diagonal = '
 ```
 
 ![png](output_22_0.png)
+
+转换后的皮尔逊相关系数
 
 ```python
 sns.heatmap(log_data.astype(float).corr(), vmax=1.0, annot=True)
@@ -374,8 +370,7 @@ display(log_samples)
  - 将指定特征的异常阶的计算结果赋值给`step`.
  - 选择性地通过将索引添加到`outliers`列表中，以移除异常值。
 
-**注意：** 如果你选择移除异常值，请保证你选择的样本点不在这些移除的点当中！
-一旦你完成了这些功能，数据集将存储在`good_data`中。
+数据集将存储在`good_data`中。
 
 
 ```python
@@ -394,7 +389,7 @@ for feature in log_data.keys():
     
     # 显示异常点
     print("Data points considered outliers for the feature '{}':".format(feature))
-#     outliers_index[feature] = log_data[~((log_data[feature] >= Q1 - step) & (log_data[feature] <= Q3 + step))].index
+    # outliers_index[feature] = log_data[~((log_data[feature] >= Q1 - step) & (log_data[feature] <= Q3 + step))].index
     display(log_data[~((log_data[feature] >= Q1 - step) & (log_data[feature] <= Q3 + step))])
     tukey = ~((log_data[feature] >= Q1 - step) & (log_data[feature] <= Q3 + step))
     tukey_count += tukey.astype(int)
@@ -971,8 +966,8 @@ good_data = log_data.drop(log_data.index[outliers]).reset_index(drop = True)
     outliers: [ 65  66  75 128 154]
     
 
-### 问题 4
-*列出所有在多于一个特征下被看作是异常的数据点。这些点应该被从数据集中移除吗？为什么？把你认为需要移除的数据点全部加入到到`outliers`变量中。* 
+### 异常点移除
+*列出所有在多于一个特征下被看作是异常的数据点。* 
 
 | index  | Fresh | Milk | Grocery | Frozen | Detergents_Paper | Delicatessen | total |
 | ------ |:-----:| -----:| -----:| -----:| -----:|-----:|----:|
@@ -994,17 +989,15 @@ good_data = log_data.drop(log_data.index[outliers]).reset_index(drop = True)
 
 既然数据被缩放到一个更加正态分布的范围中并且我们也移除了需要移除的异常点，我们现在就能够在`good_data`上使用PCA算法以发现数据的哪一个维度能够最大化特征的方差。除了找到这些维度，PCA也将报告每一个维度的*解释方差比（explained variance ratio）*--这个数据有多少方差能够用这个单独的维度来解释。注意PCA的一个组成部分（维度）能够被看做这个空间中的一个新的“特征”，但是它是原来数据中的特征构成的。
 
-在下面的代码单元中，你将要实现下面的功能：
  - 导入`sklearn.decomposition.PCA`并且将`good_data`用PCA并且使用6个维度进行拟合后的结果保存到`pca`中。
  - 使用`pca.transform`将`log_samples`进行转换，并将结果存储到`pca_samples`中。
 
-
 ```python
 from sklearn.decomposition import PCA
-# TODO：通过在good_data上使用PCA，将其转换成和当前特征数一样多的维度
+# 通过在good_data上使用PCA，将其转换成和当前特征数一样多的维度
 pca = PCA(n_components=6)
 pca.fit(good_data)
-# TODO：使用上面的PCA拟合将变换施加在log_samples上
+# 使用上面的PCA拟合将变换施加在log_samples上
 pca_samples = pca.transform(samples)
 
 # 生成PCA的结果图
@@ -1013,8 +1006,7 @@ pca_results = vs.pca_results(good_data, pca)
 
 ![png](output_32_0.png)
 
-### 问题 5
-*数据的第一个和第二个主成分* **总共** *表示了多少的方差？*  前四个主成分呢？使用上面提供的可视化图像，讨论从用户花费的角度来看前四个**主要成分**的消费行为最能代表哪种类型的客户并给出你做出判断的理由。
+### 主成分分析
 
 某一特定维度上的正向增长对应**正权**特征的**增长**和**负权**特征的**减少**。增长和减少的速率和每个特征的权重相关。[参考资料(英文)](https://onlinecourses.science.psu.edu/stat505/node/54)。
 
@@ -1159,14 +1151,11 @@ vs.biplot(good_data, reduced_data, pca)
 
 一旦我们有了原始特征的投影（红色箭头），就能更加容易的理解散点图每个数据点的相对位置。
 
-在这个双标图中，哪些初始特征与第一个主成分有强关联？哪些初始特征与第二个主成分相关联？你观察到的是否与之前得到的 pca_results 图相符？
+在这个双标图中，哪些初始特征与第一个主成分有强关联？哪些初始特征与第二个主成分相关联？观察到的是否与之前得到的 pca_results 图相符？
 
 ## 聚类
 
-在这个部分，你讲选择使用K-Means聚类算法或者是高斯混合模型聚类算法以发现数据中隐藏的客户分类。然后，你将从簇中恢复一些特定的关键数据点，通过将它们转换回原始的维度和规模，从而理解他们的含义。
-
-### 问题 6
-*使用K-Means聚类算法的优点是什么？使用高斯混合模型聚类算法的优点是什么？基于你现在对客户数据的观察结果，你选用了这两个算法中的哪一个，为什么？*
+使用K-Means聚类算法或者是高斯混合模型聚类算法以发现数据中隐藏的客户分类。然后，从簇中恢复一些特定的关键数据点，通过将它们转换回原始的维度和规模，从而理解他们的含义。
 
 1. K-Means聚类算法优缺点:
     * 优点：容易实现
@@ -1192,28 +1181,26 @@ vs.biplot(good_data, reduced_data, pca)
 from sklearn.mixture import GaussianMixture
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-# TODO：在降维后的数据上使用你选择的聚类算法
+# 在降维后的数据上使用你选择的聚类算法
 clusterer = KMeans(n_clusters=2, random_state=42)
 # clusterer.fit(reduced_data)
-# TODO：预测每一个点的簇
+# 预测每一个点的簇
 preds = clusterer.fit_predict(reduced_data)
 
-# TODO：找到聚类中心
+# 找到聚类中心
 centers = clusterer.cluster_centers_
 
-# TODO：预测在每一个转换后的样本点的类
+# 预测在每一个转换后的样本点的类
 sample_preds = clusterer.predict(pca_samples)
 
-# TODO：计算选择的类别的平均轮廓系数（mean silhouette coefficient）
+# 计算选择的类别的平均轮廓系数（mean silhouette coefficient）
 score = silhouette_score(reduced_data, preds)
 score
 ```
 
     0.4262810154691084
 
-### 问题 7
-
-*汇报你尝试的不同的聚类数对应的轮廓系数。在这些当中哪一个聚类的数目能够得到最佳的轮廓系数？* 
+### 不同聚类数对应的轮廓系数
 
 聚类数目为2时，得到最佳轮廓系数
 
@@ -1226,7 +1213,7 @@ score
 | 6 | 0.36 |
 
 ### 聚类可视化
-一旦你选好了通过上面的评价函数得到的算法的最佳聚类数目，你就能够通过使用下面的代码块可视化来得到的结果。作为实验，你可以试着调整你的聚类算法的聚类的数量来看一下不同的可视化结果。但是你提供的最终的可视化图像必须和你选择的最优聚类数目一致。
+一旦选好了通过上面的评价函数得到的算法的最佳聚类数目，能够通过使用下面的代码块可视化来得到的结果。作为实验，你可以试着调整你的聚类算法的聚类的数量来看一下不同的可视化结果。但是你提供的最终的可视化图像必须和你选择的最优聚类数目一致。
 
 
 ```python
@@ -1308,19 +1295,12 @@ _ = true_centers.plot(kind="bar", figsize=(15, 8))
 ![png](output_55_0.png)
 
 
-### 问题 8
-考虑上面的代表性数据点在每一个产品类型的花费总数，*你认为这些客户分类代表了哪类客户？为什么？*需要参考在项目最开始得到的统计值来给出理由。
+### 分类结果
 
 一个被分到`'Cluster X'`的客户最好被用 `'Segment X'`中的特征集来标识的企业类型表示。
  
 * Sigment 0: 占比最高的是`"Fresh"` ,全部都低于 median，代表客户：旅馆/咖啡厅  
 * Sigment 1: `"Milk"`，`"Grocery"`占比最高而且高于median， 代表客户：零售商
-
-### 问题 9
-*对于每一个样本点 * **问题 8**  *中的哪一个分类能够最好的表示它？你之前对样本的预测和现在的结果相符吗？*
-
-运行下面的代码单元以找到每一个样本点被预测到哪一个簇中去。
-
 
 ```python
 # 显示预测结果
@@ -1340,7 +1320,7 @@ for i, pred in enumerate(sample_preds):
 
 在最后一部分中，你要学习如何使用已经被分类的数据。首先，你要考虑不同组的客户**客户分类**，针对不同的派送策略受到的影响会有什么不同。其次，你要考虑到，每一个客户都被打上了标签（客户属于哪一个分类）可以给客户数据提供一个多一个特征。最后，你会把客户分类与一个数据中的隐藏变量做比较，看一下这个分类是否辨识了特定的关系。
 
-### 问题 10
+### A/B 测试
 在对他们的服务或者是产品做细微的改变的时候，公司经常会使用[A/B tests](https://en.wikipedia.org/wiki/A/B_testing)以确定这些改变会对客户产生积极作用还是消极作用。这个批发商希望考虑将他的派送服务从每周5天变为每周3天，但是他只会对他客户当中对此有积极反馈的客户采用。*这个批发商应该如何利用客户分类来知道哪些客户对它的这个派送策略的改变有积极的反馈，如果有的话？你需要给出在这个情形下A/B 测试具体的实现方法，以及最终得出结论的依据是什么？*  
 
 我们能假设这个改变对所有的客户影响都一致吗？我们怎样才能够确定它对于哪个类型的客户影响最大？
@@ -1352,10 +1332,10 @@ for i, pred in enumerate(sample_preds):
     * 对比实验组和对照组，检查指标是否有统计和实际显著性
 * 结论：判断实验对于对应分类用户的反馈积极/消极，从而决定策略是否实施
 
-### 问题 11
+### 运用聚类特征
 通过聚类技术，我们能够将原有的没有标记的数据集中的附加结构分析出来。因为每一个客户都有一个最佳的划分（取决于你选择使用的聚类算法），我们可以把*用户分类*作为数据的一个[**工程特征**](https://en.wikipedia.org/wiki/Feature_learning#Unsupervised_feature_learning)。假设批发商最近迎来十位新顾客，并且他已经为每位顾客每个产品类别年度采购额进行了预估。进行了这些估算之后，批发商该如何运用它的预估和**非监督学习的结果**来对这十个新的客户进行更好的预测？
 
-在下面的代码单元中，我们提供了一个已经做好聚类的数据（聚类结果为数据中的cluster属性），我们将在这个数据集上做一个小实验。尝试运行下面的代码看看我们尝试预测‘Region’的时候，如果存在聚类特征'cluster'与不存在相比对最终的得分会有什么影响？这对你有什么启发？
+在下面的代码单元中，已经提供了一个已经做好聚类的数据（聚类结果为数据中的cluster属性），我们将在这个数据集上做一个小实验。尝试运行下面的代码看看我们尝试预测‘Region’的时候，如果存在聚类特征'cluster'与不存在相比对最终的得分会有什么影响？这对你有什么启发？
 
 
 ```python
@@ -1386,7 +1366,6 @@ print("不使用cluster特征的得分", clf.score(X_test, y_test))
     使用cluster特征的得分 0.6666666666666666
     不使用cluster特征的得分 0.6436781609195402
     
- 
 使用cluster特征得分要高于不使用cluster特征。  
 因此，批发商可以使用非监督学习的结果将数据标记，然后用标记好的数据集使用监督学习的算法去对新的客户进行预测
 
@@ -1405,9 +1384,7 @@ vs.channel_results(reduced_data, outliers, pca_samples)
 ![png](output_68_0.png)
 
 
-### 问题 12
-
-*你选择的聚类算法和聚类点的数目，与内在的旅馆/餐馆/咖啡店和零售商的分布相比，有足够好吗？根据这个分布有没有哪个簇能够刚好划分成'零售商'或者是'旅馆/饭店/咖啡馆'？你觉得这个分类和前面你对于用户分类的定义是一致的吗？*
+### 分类结果与真实分布比较
 
 1. 与内在的旅馆/餐馆/咖啡店和零售商分布相比，结果不够好；有不少旅馆/餐馆/咖啡店划分在零售商的区域。  
 2. 看这个分布，大部分零售商被很好地划分。  
